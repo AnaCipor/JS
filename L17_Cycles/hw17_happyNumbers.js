@@ -83,6 +83,10 @@ if (sum===0) { // if (sum!=0)
 }
 
 
+// Если почему-то мы заранее знаем, что должно быть ровно четыре цифры, можно восстановить запись:
+// 
+// String(234).padStart(4, "0") // "0234"
+
 /*  
 2. Напишите программу,
 которая проверяет и печатает вердикт ,
@@ -154,3 +158,26 @@ first = (first-first%100)/100 + ((first-first%10)/10)%10 + first%10;
 
 
 */
+
+
+// from Matvey:
+/*
+
+const num = "0234";
+
+let sum = 0;
+
+for (let i = 0; i < num.length; i++) {
+    const digit = Number(num[i]);
+
+    if (i % 2 === 0) {
+        sum += digit;
+    } else {
+        sum -= digit;
+    }
+}
+
+console.log(sum === 0 ? "Happy Number" : "Unhappy Number");
+ 
+ 
+ */

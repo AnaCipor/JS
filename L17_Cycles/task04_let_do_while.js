@@ -30,7 +30,16 @@ while (counter<fruits.length){
     console.log(`${counter+1}.${fruits[counter]}`)
     counter+=1;
 }
+
 // line 30 ->   `${0 + 1}.${fruits[0]}`
+// const name = "Anna";
+// const age = 25;
+
+// console.log(`Меня зовут ${name}, мне ${age} лет`);
+// Внутри ${} может находиться практически любое выражение:
+
+// console.log(`2 + 2 = ${2 + 2}`);
+
 
 console.log ("4=================")
 //for of ----------------- ARRAYS
