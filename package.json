@@ -1,0 +1,28 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AnaCipor/JS#readme",
+  "bugs": {
+    "url": "https://github.com/AnaCipor/JS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnaCipor/JS.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google/genai": "^2.18.0",
+    "axios": "^1.19.0"
+  },
+  "allowScripts": {
+    "@google/genai@2.18.0": true,
+    "protobufjs@7.6.5": true
+  }
+}
