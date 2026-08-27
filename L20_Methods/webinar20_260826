@@ -1,0 +1,44 @@
+// fabric function
+
+function CreateProduct (name, price) {
+    return {
+        name,
+        price,
+        info() {
+            return `${this.name}: ${this.price}`;
+        }
+    }
+}
+const product1 = createProduct('Laptop', 1000);
+const product2 = createProduct('Robot', 2000);
+console.log (product1);
+console.log (product2);
+console.log (product2.info());
+
+// COnstructor function
+
+function Product (name, price) {
+    this.name = name;
+    this.price = price;
+    this.info = function () {
+        return `${this.name}: ${this.price}`;
+    }
+}
+
+const product3 = new Product('TV', 800);
+const product4 = new Product('Doll', 100);
+
+console.log (product3);
+console.log (product4);
+console.log (product4.info());
+
+
+// prototype
+
+function CreateProduct (name, price) {
+    this.name = name;
+    this.price = price;
+    this.info = function () {
+        return `${this.name}: ${this.price}`;
+    }
+}

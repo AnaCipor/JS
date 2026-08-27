@@ -77,6 +77,10 @@ const persons = [
 ];
 console.log(persons);
 
+// this не означает «эта функция» и не означает «вот эта переменная». 
+// this означает «текущий контекст», который вызывает функцию.
+// this в контексте функции означает «текущий экземпляр класса».
+
 function Person(id, firstName, lastName, age) {
   this.id = id;
   this.firstName = firstName;

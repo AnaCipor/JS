@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.18.0",
-    "axios": "^1.19.0"
+    "axios": "^1.20.0"
   },
   "allowScripts": {
     "@google/genai@2.18.0": true,
