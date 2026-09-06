@@ -15,7 +15,7 @@ console.log (product1);
 console.log (product2);
 console.log (product2.info());
 
-// COnstructor function
+// Constructor function
 
 function Product (name, price) {
     this.name = name;

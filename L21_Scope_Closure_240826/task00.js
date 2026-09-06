@@ -44,6 +44,10 @@ HW_20_TEXT
 ей массив строк, полученный в первой задаче и функцию, написанную во второй задаче.
 */
 
+
+
+
+
 //#1
 const massive =['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'quisque', 'faucibus']
 

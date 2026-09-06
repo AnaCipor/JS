@@ -18,10 +18,18 @@
 //     начальное_значение
 // );
 
+// полный порядок у callback такой:
+// (accumulator, currentValue, currentIndex, array)
+
+// array.reduce((acc, current) => acc + current, 0)
+// читается:
+// возьми накопленное значение acc, прибавь текущий элемент current, а начни с 0
+
 
 // !!! если внутри аргументов есть вызов функции something(),
 // сначала надо получить результат этого вызова, чтобы внешняя функция знала, что ей передали.
-// 
+// если в аргументе стоит вызов функции something(), JavaScript сначала выполняет something(),
+//  получает её результат, а потом передаёт этот результат во внешнюю функцию.
 const numbers = [1, 5, 2, 9, 4];
 
 const sum = numbers.reduce((accumulator, currentValue) => // reduce() это метод массива, который сворачивает весь массив в одно итоговое значение.
@@ -54,5 +62,12 @@ console.log("Среднее арифметическое всех элемент
 То есть:
 acc      → что уже накопили
 current  → что сейчас взяли из массива
+
+
+полная сигнатура callback у reduce()
+numbers.reduce((acc, current, index, array) => {
+    console.log(acc, current, index, array);
+    return acc + current;
+}, 0);
      
      */
