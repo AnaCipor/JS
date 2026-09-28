@@ -1,0 +1,158 @@
+import { GoogleGenAI } from "@google/genai";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
+
+// 1. Получаем продукты из CSV-файла
+async function getProducts() {
+  const filePath = path.resolve("fridge.csv");
+
+  const fileData = await readFile(filePath, "utf-8");
+
+  const lines = fileData.split("\r\n");
+
+  // Удаляем заголовок CSV
+  lines.shift();
+
+  const products = [];
+
+  for (const line of lines) {
+    if (!line.trim()) {
+      continue;
+    }
+
+    const cells = line.split(",");
+
+    const name = cells[0];
+    const count = Number(cells[1]);
+    const price = cells[2] ? Number(cells[2]) : null;
+    const expDate = cells[3] ? cells[3] : null;
+
+    products.push({
+      name,
+      count,
+      price,
+      expDate,
+    });
+  }
+
+  return products;
+}
+
+
+// 2. Создаем базовый промпт в зависимости от роли
+function createBasePromptByRole(user) {
+  if (user.role === "ADMIN") {
+    return `
+Ты - квалифицированный повар, определяющий ингредиенты блюда по названию блюда.
+
+Тебе дается название желаемого блюда и список продуктов,
+имеющихся в холодильнике.
+
+Твоя задача - определить, какие недостающие продукты надо закупить,
+чтобы можно было приготовить это блюдо.
+
+Правила:
+- возвращай только список продуктов, которые нужно закупить;
+- не возвращай продукты, не имеющие отношения к данному блюду;
+- не возвращай продукты, которые уже есть в холодильнике.
+`;
+  } else {
+    return `
+Ты - квалифицированный повар, определяющий ингредиенты блюда по названию блюда.
+
+Тебе дается название желаемого блюда и список продуктов,
+имеющихся в холодильнике.
+
+Твоя задача - определить, какие продукты из холодильника
+можно использовать для приготовления этого блюда.
+
+Правила:
+- возвращай только продукты из числа имеющихся в холодильнике;
+- не возвращай продукты, не имеющие отношения к данному блюду;
+- не возвращай продукты, которых нет в холодильнике.
+`;
+  }
+}
+
+
+// 3. Создаем полный промпт для конкретного блюда
+function createPrompt(basePrompt, dishTitle, availableProducts) {
+  return `
+${basePrompt}
+
+Название блюда:
+${dishTitle}
+
+Продукты, которые сейчас есть в холодильнике:
+${JSON.stringify(availableProducts, null, 2)}
+
+Дай рекомендации согласно правилам выше.
+`;
+}
+
+
+// 4. Отправляем промпт Gemini
+async function askAi(prompt) {
+  const genAi = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+  });
+
+  const response = await genAi.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: prompt,
+  });
+
+  return response.text;
+}
+
+
+// 5. Главная функция
+async function main() {
+  const user = {
+    name: "John",
+    role: "USER",
+  };
+
+  const admin = {
+    name: "Bill",
+    role: "ADMIN",
+  };
+
+  const authenticatedUser = admin;
+
+  try {
+    // 1. Получаем продукты из CSV
+    const availableProducts = await getProducts();
+
+    console.log("Продукты из холодильника:");
+    console.table(availableProducts);
+
+
+    // 2. Получаем базовый промпт по роли
+    const basePrompt = createBasePromptByRole(authenticatedUser);
+
+
+    // 3. Создаем полный промпт для блюда
+    const prompt = createPrompt(
+      basePrompt,
+      "борщ",
+      availableProducts
+    );
+
+
+    // 4. Отправляем промпт AI
+    const aiResponse = await askAi(prompt);
+
+
+    // 5. Выводим результат
+    console.log("\n=== Ответ AI ===");
+    console.log(aiResponse);
+
+  } catch (error) {
+    console.error("Ошибка:", error.message);
+  }
+}
+
+
+main();
