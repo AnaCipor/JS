@@ -1,6 +1,6 @@
-import { ROLES } from "./config.js";
+import {ROLES} from "./config.js";
 
-function createBasePromptByRole(user){
+export function createBasePromptByRole(user) {
     if (user.role === ROLES.ADMIN) {
         return `
         Ты - квалифицированный повар, определяющий ингредиенты
@@ -15,7 +15,7 @@ function createBasePromptByRole(user){
             -не возвращай продукты, не имеющие отношения к данному блюду.
             -не возвращай продукты, которые уже есть в холодильнике.        
         `;
-    } 
+    }
     if (user.role === ROLES.USER) {
         return `
         Ты - квалифицированный повар, определяющий ингредиенты
@@ -32,33 +32,27 @@ function createBasePromptByRole(user){
             -не возвращай продукты, не имеющие отношения к данному блюду.
             -не возвращай продукты, которых нет в холодильнике.          
         `;
+
     }
 
-throw new Error(`Access denied ${user.role}`);
+    throw new Error(`Access denied ${user.role}`);
 }
 
-export { createBasePromptByRole };
-
-
-export function formatProductsForPromt(products) {
-
-    return products.map(product => `${product.name}: ${product.count}`).join('\n');
-};
+export function formatProductsForPrompt(products) {
+    return products.map(product => ` ${product.name}: ${product.count}`).join('\n');
+}
 
 export function createPrompt(basePrompt, dishTitle, products) {
-    if (!dishTitle.trim()){
-        throw new Error(`Dish title is required`);
-    };
-    if (!Array.isArray(products)) {
-        throw new Error(`Products must be an array of ${products}`);
+    if(!dishTitle.trim()){
+        throw new Error(`The dish title is required`);
     }
 
-    const productText = formatProductsForPromt(products);
+    if(!Array.isArray(products)) {
+        throw new Error(`The product must be an array of ${products}`);
+    }
+
+    const productText = formatProductsForPrompt(products);
     return `
-        ${basePrompt}
-        Желаемое блюдо: ${dishTitle}
-        Продукты, которые сейчас есть в холодильнике:
-        ${productText}
-        Дай рекомендации согласно правилам выше.
-        `;
+    ${basePrompt} Желаемое блюдо: ${dishTitle} Продукты в холодильнике ${productText}`
+
 }
